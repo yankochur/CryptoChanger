@@ -8,7 +8,7 @@ def create_app():
     def register_blueprints():
         app.register_blueprint(main)
 
-
     register_blueprints()
+
     return app
 
