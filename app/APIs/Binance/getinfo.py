@@ -1,4 +1,4 @@
-from app.APIs.APIconnect.base import BaseExchangesAPI
+from app.APIs.base import BaseExchangesAPI
 import requests
 
 
