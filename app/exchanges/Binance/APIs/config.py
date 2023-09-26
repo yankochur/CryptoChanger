@@ -1,3 +1,0 @@
-
-apiKey = "QWCQIukvYvBdtjmZWT6FDaE5hKlb6eth58zO39AXPA6xqSSlPztyYYhhhzyZTB12"
-apiSecurity = "vkOJGdIdhyxMCfcsVxoMIq3d8j2vyEu3gQSH12ReYQByhfnGg1yIW3mYzOLt2G6x"
