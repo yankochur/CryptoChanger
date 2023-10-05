@@ -1,7 +1,12 @@
 # from app.__init__ import create_app
-from app.exchanges.Binance import api
+from app.exchanges.Binance import api as binance_api
+from app.exchanges.ByBit import api as bybit_api
 
-connection = api.API()
+
+BINANCE_CONNECTION = binance_api.API()
+BYBIT_CONNECTION = bybit_api.API()
+
 
 if __name__ == '__main__':
-    connection.hmac_connection()
+    BINANCE_CONNECTION.hmac_connection()
+    BYBIT_CONNECTION.hmac_connection()
