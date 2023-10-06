@@ -1,6 +1,7 @@
+import urllib3
 from decouple import config
 from app.exchanges.lib.utils import get_timestamp
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote_plus
 import requests
 import hashlib
 import hmac
@@ -10,7 +11,7 @@ class API(object):
     def __init__(self,
                  api_key=config("BYBIT_API_KEY"),
                  api_secret=config("BYBIT_API_SECRET"),
-                 url='https://api.bybit.com/v5/account/wallet-balance',
+                 url= "https://api.bybit.com/spot/v3/private/account",
                  ):
         self.api_key = api_key
         self.api_secret = api_secret
@@ -20,24 +21,58 @@ class API(object):
             "X-BAPI-API-KEY": api_key,
             "X-BAPI-TIMESTAMP": str(get_timestamp()),
             "X-BAPI-RECV-WINDOW": self.recv_window,
-            "Content-Type": "application/json"
         }
+        # self.params = {
+        #     "accountType": "SPOT",
+        #     "coin": "USDT",
+        # }
         self.params = {
-            "accountType": "SPOT",
-            "coin": "USDT",
+            "api_key": api_key,
+            "timestamp": round(get_timestamp()),
+            "recv_window": 10000
         }
 
     def hmac_connection(self):
-        query_string = urlencode(self.params)
+        # query_string = urlencode(self.params)
+        #
+        # param_str = str(get_timestamp()) + self.api_key + self.recv_window + query_string
+        # signature = hmac.new(bytes(self.api_secret, "utf-8"), param_str.encode("utf-8"), hashlib.sha256).hexdigest()
+        # self.headers["X-BAPI-SIGN"] = signature
+        #
+        # response = requests.get(self.url+"?"+query_string, headers=self.headers)
+        #
+        # print(param_str)
+        # print(query_string)
+        # print(self.params)
+        # print(self.headers)
+        #
+        # if response.status_code == 200:
+        #     print(response.text)
+        #
+        # else:
+        #     print(f"Error: {response.status_code}, {response.text}")
 
-        param_str = str(get_timestamp()) + self.api_key + self.recv_window + query_string
-        signature = hmac.new(bytes(self.api_secret, "utf-8"), param_str.encode("utf-8"), hashlib.sha256).hexdigest()
-        self.headers["X-BAPI-SIGN"] = signature
+        param_str = urlencode(
+            sorted(self.params.items(), key=lambda tup: tup[0])
+        )
 
-        response = requests.get(self.url, params=self.params, headers=self.headers)
+        hash = hmac.new(
+            bytes(self.api_secret, "utf-8"),
+            param_str.encode("utf-8"),
+            hashlib.sha256
+        )
 
-        if response.status_code == 200:
-            print(response.text)
+        signature = hash.hexdigest()
+        sign_real = {
+            "sign": signature
+        }
 
-        else:
-            print(f"Error: {response.status_code}, {response.text}")
+        param_str = quote_plus(param_str, safe="=&")
+        full_param_str = f"{param_str}&sign={sign_real['sign']}"
+
+        headers = {"Content-Type": "application/json"}
+
+        urllib3.disable_warnings()
+
+        response = requests.get(f"{self.url}?{full_param_str}", headers=headers, verify=False).json()
+        print(response)
