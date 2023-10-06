@@ -56,13 +56,13 @@ class API(object):
             sorted(self.params.items(), key=lambda tup: tup[0])
         )
 
-        hash = hmac.new(
+        signature_hash = hmac.new(
             bytes(self.api_secret, "utf-8"),
             param_str.encode("utf-8"),
             hashlib.sha256
         )
 
-        signature = hash.hexdigest()
+        signature = signature_hash.hexdigest()
         sign_real = {
             "sign": signature
         }
@@ -75,4 +75,7 @@ class API(object):
         urllib3.disable_warnings()
 
         response = requests.get(f"{self.url}?{full_param_str}", headers=headers, verify=False).json()
-        print(response)
+        print("ByBit Balance:")
+
+        balances = response.get("result")["balances"]
+        print(balances)

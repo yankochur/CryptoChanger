@@ -31,6 +31,8 @@ class API(object):
         if response.status_code == 200:
             account_data = response.json()
 
+            print("Binance Balance:")
+
             for asset in account_data['balances']:
                 if float(asset['free']) > 0:
                     print(f"Asset: {asset['asset']}, Free: {asset['free']}, Locked: {asset['locked']}")
