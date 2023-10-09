@@ -1,11 +1,11 @@
 from decouple import config
-from app.exchanges.lib.utils import get_timestamp
+from app.exchanges.lib.utils import get_timestamp, BaseAPI
 import hashlib
 import hmac
 import requests
 
 
-class API(object):
+class BinanceAPI(BaseAPI):
     def __init__(self,
                  api_key=config("BINANCE_API_KEY"),
                  api_secret=config("BINANCE_API_SECRET"),
@@ -31,7 +31,7 @@ class API(object):
         if response.status_code == 200:
             account_data = response.json()
 
-            print("Binance Balance:")
+            print("binance Balance:")
 
             for asset in account_data['balances']:
                 if float(asset['free']) > 0:

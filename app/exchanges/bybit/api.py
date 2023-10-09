@@ -1,13 +1,13 @@
 import urllib3
 from decouple import config
-from app.exchanges.lib.utils import get_timestamp
+from app.exchanges.lib.utils import get_timestamp, BaseAPI
 from urllib.parse import urlencode, quote_plus
 import requests
 import hashlib
 import hmac
 
 
-class API(object):
+class ByBitAPI(BaseAPI):
     def __init__(self,
                  api_key=config("BYBIT_API_KEY"),
                  api_secret=config("BYBIT_API_SECRET"),
@@ -75,7 +75,7 @@ class API(object):
         urllib3.disable_warnings()
 
         response = requests.get(f"{self.url}?{full_param_str}", headers=headers, verify=False).json()
-        print("ByBit Balance:")
+        print("bybit Balance:")
 
         balances = response.get("result")["balances"]
         print(balances)
