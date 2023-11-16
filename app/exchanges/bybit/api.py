@@ -1,6 +1,6 @@
 import urllib3
 from decouple import config
-from app.exchanges.lib.utils import get_timestamp, BaseAPI
+from app.exchanges.api_lib.api_utils import get_timestamp, BaseAPI
 from urllib.parse import urlencode, quote_plus
 import requests
 import hashlib

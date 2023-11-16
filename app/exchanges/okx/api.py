@@ -1,13 +1,9 @@
-import datetime
-
 from decouple import config
-from app.exchanges.lib.utils import get_timestamp, BaseAPI
+from app.exchanges.api_lib.api_utils import BaseAPI
 import datetime
-import hashlib
 import hmac
 import base64
 import requests
-import json
 
 
 class OkxAPI(BaseAPI):
