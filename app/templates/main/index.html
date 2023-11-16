@@ -1,13 +1,22 @@
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Hello</h1>
-</body>
-</html>
+{% extends 'main/base.html' %}
+
+{% block title %}Главное меню{% endblock %}
+
+{% block body %}
+    <div class="info">
+        <h1>Ваш баланс</h1>
+    </div>
+
+    <div class="balance-container">
+        {% for api_name, api_data in data.items() %}
+            <div class="balance-item">
+                <h3>{{ api_name }}</h3>
+                <ul>
+                    {% for el in api_data %}
+                        <li>{{ el }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
