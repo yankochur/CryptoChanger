@@ -1,27 +1,16 @@
-from flask import Blueprint, render_template, redirect
-from app.exchanges.binance import api as binance_api
-from app.exchanges.bybit import api as bybit_api
-from app.exchanges.okx import api as okx_api
-import json
+from flask import Blueprint, render_template
+from app.main.utils import get_balances
+
 
 main = Blueprint("main", __name__, template_folder="templates")
 
 
 @main.route('/')
-@main.route('/home')
+@main.route('/main')
 def index_html():
-    binance_connection = binance_api.BinanceAPI()
-    bybit_connection = bybit_api.ByBitAPI()
-    okx_connection = okx_api.OkxAPI()
+    return render_template('/main/index.html', data=get_balances())
 
-    binance = binance_connection.hmac_connection()
-    bybit = bybit_connection.hmac_connection()
-    okx = okx_connection.get_balance()
 
-    data = {
-        "binance_api": binance,
-        "bybit_api": bybit,
-        "okx_api": okx,
-    }
-
-    return render_template('/main/index.html', data=data)
+@main.route('/account')
+def account_html():
+    return render_template('/main/account.html')
