@@ -31,10 +31,15 @@ class BinanceAPI(BaseAPI):
         if response.status_code == 200:
             account_data = response.json()
 
-            print("binance Balance:")
+            # print("binance Balance:")
+
+            balance_result = []
 
             for asset in account_data['balances']:
                 if float(asset['free']) > 0:
-                    print(f"Asset: {asset['asset']}, Free: {asset['free']}, Locked: {asset['locked']}")
+                    balance_result.append(asset)
+                    # print(f"Asset: {asset['asset']}, Free: {asset['free']}, Locked: {asset['locked']}")
+            return balance_result
         else:
-            print(f"Error: {response.status_code}, {response.text}")
+            return f"Error: {response.status_code}, {response.text}"
+            # print(f"Error: {response.status_code}, {response.text}")

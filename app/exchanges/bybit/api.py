@@ -75,7 +75,8 @@ class ByBitAPI(BaseAPI):
         urllib3.disable_warnings()
 
         response = requests.get(f"{self.url}?{full_param_str}", headers=headers, verify=False).json()
-        print("bybit Balance:")
+        # print("bybit Balance:")
 
         balances = response.get("result")["balances"]
-        print(balances)
+        # print(balances)
+        return balances
