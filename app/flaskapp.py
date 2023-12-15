@@ -6,10 +6,15 @@ import bcrypt
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:test@127.0.0.1:5432/postgres'
 app.config['SECRET_KEY'] = '3c4dc378e50242e3b4b5802952566fd519466210'
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 
 class User(db.Model):
