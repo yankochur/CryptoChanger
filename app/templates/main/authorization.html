@@ -18,6 +18,15 @@
 					<label for="log_password" class="label">Password</label>
 					<input id="log_password" type="password" class="input" data-type="password" name="password">
 				</div>
+					{% with messages = get_flashed_messages() %}
+					  {% if messages %}
+						<ul class=flashes>
+						{% for message in messages %}
+						  <li>{{ message }}</li>
+						{% endfor %}
+						</ul>
+					  {% endif %}
+					{% endwith %}
 				<div class="group">
 					<input id="log_check" type="checkbox" class="check" checked>
 					<label for="log_check"><span class="icon"></span> Keep me Signed in</label>
@@ -30,9 +39,9 @@
 					<a href="#forgot">Forgot Password?</a>
 				</div>
 				</form>
-			</div>op[
+			</div>
 			<div class="sign-up-htm">
-				<form action="/authorization" method="POST">
+				<form action="/sign-up" method="POST">
 				<div class="group">
 					<label for="reg_username" class="label">Username</label>
 					<input id="reg_username" type="text" class="input" name="username">
