@@ -1,13 +1,13 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
+from flask_login import login_user
 from pydantic import ValidationError
 
 from app.main.utils import get_balances
 from app.models.user import UserLoginForm
+from app.models.user import User
 
-import flask_login
 
-
-main = Blueprint("main", __name__, template_folder="templates")
+main = Blueprint("main", __name__, template_folder="templates", static_folder="static")
 
 
 @main.route('/')
@@ -29,6 +29,7 @@ def authorization_html():
                 email=request.form['email'],
                 password=request.form['password']
             )
+            # login_user(User)
         except ValidationError:
             flash("Incorrect email form")
             return redirect(url_for('main.authorization_html'))
