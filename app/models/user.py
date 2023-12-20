@@ -18,17 +18,11 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class User(UserMixin, db.Model):
+class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(80), nullable=False)
-
-    def __init__(self, username, email, password):
-        self.id = id
-        self.username = username
-        self.email = email
-        self.password = UserLoginForm._hash_password
 
     def is_authenticated(self):
         return True
@@ -44,9 +38,10 @@ class User(UserMixin, db.Model):
 
 
 class UserRegisterForm(BaseModel):
-    nickname: str
+    username: str
     email: EmailStr
     password: str
+
 
     @field_validator('password')
     @classmethod

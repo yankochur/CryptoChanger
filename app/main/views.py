@@ -3,8 +3,7 @@ from flask_login import login_user
 from pydantic import ValidationError
 
 from app.main.utils import get_balances
-from app.models.user import UserLoginForm
-from app.models.user import User
+from app.models.user import UserLoginForm, UserRegisterForm, User, db
 
 
 main = Blueprint("main", __name__, template_folder="templates", static_folder="static")
@@ -39,6 +38,20 @@ def authorization_html():
 
 @main.route('/sign-up', methods=['POST'])
 def registration_html():
-    data = request.form['username']
-    print(data)
+    if request.method == 'POST':
+        try:
+            new_user: UserRegisterForm = UserRegisterForm(
+                username=request.form['username'],
+                email=request.form['email'],
+                password=request.form['password']
+            )
+            new_user = User(username=new_user.username, email=new_user.email, password=new_user.password)
+            db.session.add(new_user)
+            db.session.commit()
+            print(new_user)
+            return redirect(url_for('main.authorization_html'))
+        except ValidationError:
+            print('дебил неправильно заполнил регистрацию')
+            return redirect(url_for('main.authorization_html'))
+
     return render_template('main/authorization.html')
