@@ -1,8 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_user
-from pydantic import ValidationError
+from pydantic impoort Val
 
-from app.main.utils import get_balances
+from app.main.utils import get_balances, Hasher
 from app.models.user import UserLoginForm, UserRegisterForm, User, db
 
 
@@ -28,30 +28,36 @@ def authorization_html():
                 email=request.form['email'],
                 password=request.form['password']
             )
-            # login_user(User)
-        except ValidationError:
-            flash("Incorrect email form")
+            user = User.query.filter_by(email=loginform.email).first()
+            if user is not None and Hasher.verify_password(loginform.password, user.password):
+                login_user(user)
+                print('authorized')
+                return redirect(url_for('main.index_html'))
+            else:
+                raise ValueError("Incorrect email or password")
+        except ValueError:
+            flash("Incorrect email form", '')
             return redirect(url_for('main.authorization_html'))
-        print(loginform)
     return render_template('main/authorization.html')
 
 
 @main.route('/sign-up', methods=['POST'])
 def registration_html():
     if request.method == 'POST':
-        try:
-            new_user: UserRegisterForm = UserRegisterForm(
-                username=request.form['username'],
-                email=request.form['email'],
-                password=request.form['password']
-            )
+        new_user: UserRegisterForm = UserRegisterForm(
+            username=request.form['username'],
+            email=request.form['email'],
+            password=request.form['password']
+        )
+        if len(request.form['password']) < 8 or len(request.form['password']) > 32:
+            flash('The password must be between 8 and 32 characters long')
+            return redirect(url_for('main.authorization_html'))
+        elif :
+            pass
+        else:
             new_user = User(username=new_user.username, email=new_user.email, password=new_user.password)
             db.session.add(new_user)
             db.session.commit()
-            print(new_user)
             return redirect(url_for('main.authorization_html'))
-        except ValidationError:
-            print('дебил неправильно заполнил регистрацию')
-            return redirect(url_for('main.authorization_html'))
-
-    return render_template('main/authorization.html')
+    else:
+        raise ValueError('password < than 8')

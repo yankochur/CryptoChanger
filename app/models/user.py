@@ -1,9 +1,8 @@
 from pydantic import BaseModel, EmailStr, field_validator
 from app.main.utils import Hasher
 from flask import Flask
-from flask_login import LoginManager, UserMixin
+from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-import bcrypt
 
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
@@ -52,8 +51,3 @@ class UserRegisterForm(BaseModel):
 class UserLoginForm(BaseModel):
     email: EmailStr
     password: str
-
-    @field_validator('password')
-    @classmethod
-    def _hash_password(cls, v: str) -> str:
-        return Hasher.get_password_hash(v)
