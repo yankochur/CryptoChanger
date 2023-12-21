@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_user
-from pydantic impoort Val
+from pydantic import ValidationError
 
 from app.main.utils import get_balances, Hasher
 from app.models.user import UserLoginForm, UserRegisterForm, User, db
@@ -49,15 +49,23 @@ def registration_html():
             email=request.form['email'],
             password=request.form['password']
         )
-        if len(request.form['password']) < 8 or len(request.form['password']) > 32:
+        if len(request.form.get('password')) < 8 or len(request.form.get('password')) > 32:
             flash('The password must be between 8 and 32 characters long')
             return redirect(url_for('main.authorization_html'))
-        elif :
-            pass
+        elif len(new_user.username) < 3 or len(new_user.username) > 32:
+            flash('The username must be between 3 and 32 characters long')
+            return redirect(url_for('main.authorization_html'))
+        elif request.form.get('password') != request.form.get('repeated_password'):
+            flash('The password has not been confirmed')
+            return redirect(url_for('main.authorization_html'))
         else:
             new_user = User(username=new_user.username, email=new_user.email, password=new_user.password)
+        if User.query.filter_by(email=new_user.email).first() is not None:
+            flash('That email is already used')
+            return redirect(url_for('main.authorization_html'))
+        else:
             db.session.add(new_user)
             db.session.commit()
             return redirect(url_for('main.authorization_html'))
     else:
-        raise ValueError('password < than 8')
+        raise ValueError('something with registration went wrong')
