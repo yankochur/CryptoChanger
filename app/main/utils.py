@@ -1,6 +1,7 @@
 from app.exchanges.binance import api as binance_api
 from app.exchanges.bybit import api as bybit_api
 from app.exchanges.okx import api as okx_api
+
 from passlib.context import CryptContext
 
 
