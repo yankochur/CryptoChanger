@@ -1,9 +1,9 @@
 from pydantic import BaseModel, EmailStr, field_validator
-from app.main.utils import Hasher
 from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
+from app.main.utils import Hasher
 
 app = Flask(__name__, template_folder='../templates', static_folder='../static')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:test@127.0.0.1:5432/postgres'

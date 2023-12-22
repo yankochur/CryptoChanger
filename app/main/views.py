@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_user
+from pydantic import ValidationError
 
+from app.main.validators import RegistrationValidator
 from app.main.utils import get_balances, Hasher
 from app.models.user import UserLoginForm, UserRegisterForm, User, db
-
 
 main = Blueprint("main", __name__, template_folder="templates", static_folder="static")
 
@@ -43,28 +44,30 @@ def authorization_html():
 @main.route('/sign-up', methods=['POST'])
 def registration_html():
     if request.method == 'POST':
-        new_user: UserRegisterForm = UserRegisterForm(
+        try:
+            new_user: UserRegisterForm = UserRegisterForm(
+                username=request.form['username'],
+                email=request.form['email'],
+                password=request.form['password']
+            )
+        except ValidationError:
+            flash("nety @")
+
+        validator = RegistrationValidator()
+        errors = validator.validate_all(
             username=request.form['username'],
-            email=request.form['email'],
-            password=request.form['password']
+            password=request.form['password'],
+            repeated_password=request.form['repeated_password'],
+            email=request.form['email']
         )
-        if len(request.form.get('password')) < 8 or len(request.form.get('password')) > 32:
-            flash('The password must be between 8 and 32 characters long')
-            return redirect(url_for('main.authorization_html'))
-        elif len(new_user.username) < 3 or len(new_user.username) > 32:
-            flash('The username must be between 3 and 32 characters long')
-            return redirect(url_for('main.authorization_html'))
-        elif request.form.get('password') != request.form.get('repeated_password'):
-            flash('The password has not been confirmed')
+
+        if errors:
+            flash(errors)
             return redirect(url_for('main.authorization_html'))
         else:
-            new_user = User(username=new_user.username, email=new_user.email, password=new_user.password)
-        if User.query.filter_by(email=new_user.email).first() is not None:
-            flash('That email is already used')
-            return redirect(url_for('main.authorization_html'))
-        else:
-            db.session.add(new_user)
-            db.session.commit()
+            flash("Успешная регистрация")
+            # db.session.add(new_user)
+            # db.session.commit()
             return redirect(url_for('main.authorization_html'))
     else:
         raise ValueError('something with registration went wrong')
