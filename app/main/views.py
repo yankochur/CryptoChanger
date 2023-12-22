@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, flash, url_for
 from flask_login import login_user
-from pydantic import ValidationError
 
 from app.main.utils import get_balances, Hasher
 from app.models.user import UserLoginForm, UserRegisterForm, User, db
@@ -12,12 +11,12 @@ main = Blueprint("main", __name__, template_folder="templates", static_folder="s
 @main.route('/')
 @main.route('/main')
 def index_html():
-    return render_template('/main/index.html', data=get_balances())
+    return render_template('main/index.html', data=get_balances())
 
 
 @main.route('/account')
 def account_html():
-    return render_template('/main/account.html')
+    return render_template('main/account.html')
 
 
 @main.route('/authorization', methods=['GET', 'POST'])
