@@ -23,13 +23,16 @@ class User(db.Model):
     email = db.Column(db.String(100), unique=True)
     password = db.Column(db.String(80), nullable=False)
 
-    def is_authenticated(self):
+    @staticmethod
+    def is_authenticated():
         return True
 
-    def is_active(self):
+    @staticmethod
+    def is_active():
         return True
 
-    def is_anonymous(self):
+    @staticmethod
+    def is_anonymous():
         return False
 
     def get_id(self):
@@ -40,7 +43,6 @@ class UserRegisterForm(BaseModel):
     username: str
     email: EmailStr
     password: str
-
 
     @field_validator('password')
     @classmethod

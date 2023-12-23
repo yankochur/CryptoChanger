@@ -4,7 +4,7 @@ from pydantic import ValidationError
 
 from app.main.validators import RegistrationValidator
 from app.main.utils import get_balances, Hasher
-from app.models.user import UserLoginForm, UserRegisterForm, User, db
+from app.models.user import UserLoginForm, UserRegisterForm, User
 
 main = Blueprint("main", __name__, template_folder="templates", static_folder="static")
 
@@ -20,7 +20,7 @@ def account_html():
     return render_template('main/account.html')
 
 
-@main.route('/authorization', methods=['GET', 'POST'])
+@main.route('/login', methods=['GET', 'POST'])
 def authorization_html():
     if request.form.get('email') and request.form.get('password'):
         try:
@@ -38,7 +38,7 @@ def authorization_html():
         except ValueError:
             flash("Incorrect email form", category='flash-error')
             return redirect(url_for('main.authorization_html'))
-    return render_template('main/authorization.html')
+    return render_template('main/login.html')
 
 
 @main.route('/sign-up', methods=['POST'])
