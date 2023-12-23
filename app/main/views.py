@@ -31,12 +31,12 @@ def authorization_html():
             user = User.query.filter_by(email=loginform.email).first()
             if user is not None and Hasher.verify_password(loginform.password, user.password):
                 login_user(user)
-                print('authorized')
+                print(loginform.email, 'authorized')
                 return redirect(url_for('main.index_html'))
             else:
                 raise ValueError("Incorrect email or password")
         except ValueError:
-            flash("Incorrect email form", '')
+            flash("Incorrect email form", category='flash-error')
             return redirect(url_for('main.authorization_html'))
     return render_template('main/authorization.html')
 
@@ -51,10 +51,11 @@ def registration_html():
                 password=request.form['password']
             )
         except ValidationError:
-            flash("nety @")
+            flash("The email was entered incorrectly", category='flash-error')
+            return redirect(url_for('main.authorization_html'))
 
-        validator = RegistrationValidator()
-        errors = validator.validate_all(
+        registration_validator = RegistrationValidator()
+        errors = registration_validator.validate_all(
             username=request.form['username'],
             password=request.form['password'],
             repeated_password=request.form['repeated_password'],
@@ -62,10 +63,10 @@ def registration_html():
         )
 
         if errors:
-            flash(errors)
+            flash(errors, category='flash-error')
             return redirect(url_for('main.authorization_html'))
         else:
-            flash("Успешная регистрация")
+            flash("Successful registration", "flash-success")
             # db.session.add(new_user)
             # db.session.commit()
             return redirect(url_for('main.authorization_html'))

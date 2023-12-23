@@ -218,6 +218,10 @@ a{color:inherit;text-decoration:none}
 	text-align:center;
 }
 
-.flashes{
+.flash-error{
     color:red;
+}
+
+.flash-success{
+	color:forestgreen;
 }
