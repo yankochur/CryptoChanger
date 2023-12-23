@@ -228,8 +228,10 @@ html {
 
 .flash-error{
     color:red;
+    font-weight: bold;
 }
 
 .flash-success{
 	color:forestgreen;
+    font-weight: bold;
 }

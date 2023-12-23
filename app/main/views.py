@@ -21,8 +21,8 @@ def account_html():
 
 
 @main.route('/login', methods=['GET', 'POST'])
-def authorization_html():
-    if request.form.get('email') and request.form.get('password'):
+def login_html():
+    if request.method == 'POST':
         try:
             loginform: UserLoginForm = UserLoginForm(
                 email=request.form['email'],
@@ -37,11 +37,11 @@ def authorization_html():
                 raise ValueError("Incorrect email or password")
         except ValueError:
             flash("Incorrect email form", category='flash-error')
-            return redirect(url_for('main.authorization_html'))
+            return redirect(url_for('main.login_html'))
     return render_template('main/login.html')
 
 
-@main.route('/sign-up', methods=['POST'])
+@main.route('/registration', methods=['GET', 'POST'])
 def registration_html():
     if request.method == 'POST':
         try:
@@ -52,7 +52,7 @@ def registration_html():
             )
         except ValidationError:
             flash("The email was entered incorrectly", category='flash-error')
-            return redirect(url_for('main.authorization_html'))
+            return redirect(url_for('main.registration_html'))
 
         registration_validator = RegistrationValidator()
         errors = registration_validator.validate_all(
@@ -64,11 +64,10 @@ def registration_html():
 
         if errors:
             flash(errors, category='flash-error')
-            return redirect(url_for('main.authorization_html'))
+            return redirect(url_for('main.registration_html'))
         else:
             flash("Successful registration", "flash-success")
             # db.session.add(new_user)
             # db.session.commit()
-            return redirect(url_for('main.authorization_html'))
-    else:
-        raise ValueError('something with registration went wrong')
+            return redirect(url_for('main.registration_html'))
+    return render_template('main/registration.html')
