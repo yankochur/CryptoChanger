@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, redirect, flash, url_for
-from flask_login import login_user
+from flask import Blueprint, render_template, request, redirect, flash, url_for, session
+from flask_login import login_user, login_required, logout_user, current_user
 from pydantic import ValidationError
 
 from app.main.validators import RegistrationValidator
@@ -17,6 +17,14 @@ def index_html():
 
 @main.route('/account')
 def account_html():
+    print(current_user.is_authenticated())
+    return render_template('main/account.html')
+
+
+@main.route('/p2p')
+def p2p_html():
+    logout_user()
+    print('logout user successful')
     return render_template('main/account.html')
 
 
