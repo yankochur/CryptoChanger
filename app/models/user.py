@@ -39,6 +39,32 @@ class User(db.Model):
         return str(self.id)
 
 
+class AnonymousUser:
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), nullable=False)
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(80), nullable=False)
+
+    @staticmethod
+    def is_authenticated():
+        return False
+
+    @staticmethod
+    def is_active():
+        return False
+
+    @staticmethod
+    def is_anonymous():
+        return True
+
+    @staticmethod
+    def get_id():
+        return None
+
+
+login_manager.anonymous_user = AnonymousUser
+
+
 class UserRegisterForm(BaseModel):
     username: str
     email: EmailStr
