@@ -1,10 +1,10 @@
-from flask import Blueprint, render_template, request, redirect, flash, url_for, session
-from flask_login import login_user, login_required, logout_user, current_user
+from flask import Blueprint, render_template, request, redirect, flash, url_for
+from flask_login import login_user, logout_user
 from pydantic import ValidationError
 
 from app.main.validators import RegistrationValidator
 from app.main.utils import get_balances, Hasher
-from app.models.user import UserLoginForm, UserRegisterForm, User
+from app.models.user import UserLoginForm, UserRegisterForm, User, db
 
 main = Blueprint("main", __name__, template_folder="templates", static_folder="static")
 
@@ -17,14 +17,11 @@ def index_html():
 
 @main.route('/account')
 def account_html():
-    print(current_user.is_authenticated())
     return render_template('main/account.html')
 
 
 @main.route('/p2p')
 def p2p_html():
-    logout_user()
-    print('logout user successful')
     return render_template('main/account.html')
 
 
@@ -75,7 +72,14 @@ def registration_html():
             return redirect(url_for('main.registration_html'))
         else:
             flash("Successful registration", "flash-success")
-            # db.session.add(new_user)
-            # db.session.commit()
+            db.session.add(new_user)
+            db.session.commit()
             return redirect(url_for('main.registration_html'))
     return render_template('main/registration.html')
+
+
+@main.route('/logout', methods=['POST'])
+def logout_func():
+    logout_user()
+    flash("Successfully logged out", "flash-simple")
+    return redirect(url_for('main.login_html'))
