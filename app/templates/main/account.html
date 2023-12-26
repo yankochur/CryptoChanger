@@ -3,7 +3,73 @@
 {% block title %} Аккаунт {% endblock %}
 
 {% block body %}
-    <div class="info">
-        <h1>Аккаунт</h1>
-    </div>
+  <body class="align">
+
+  <div class="grid">
+    <p class="center">Binance</p>
+    <form action="/#" method="POST">
+      <div class="center">API Key
+        <label for="binance_api_key"><span class="hidden">API Key</span></label>
+        <input id="binance_api_key" type="text" name="binance_api_key" class="form-field" required>
+      </div>
+
+      <div class="center">API Secret
+        <label for="binance_api_secret"><span class="hidden">API Secret</span></label>
+        <input id="binance_api_secret" type="text" name="binance_api_secret" class="form-field" required>
+      </div>
+
+      <div class="center">
+        <input type="submit" value="Send">
+      </div>
+    </form>
+
+      <p class="center">ByBit</p>
+    <form action="/#" method="POST">
+      <div class="center">API Key
+        <label for="binance_api_key"><span class="hidden">API Key</span></label>
+        <input id="binance_api_key" type="text" name="bybit_api_key" class="form-field" required>
+      </div>
+
+      <div class="center">API Secret
+        <label for="binance_api_secret"><span class="hidden">API Secret</span></label>
+        <input id="binance_api_secret" type="text" name="bybit_api_secret" class="form-field" required>
+      </div>
+
+      <div class="center">
+        <input type="submit" value="Send">
+      </div>
+    </form>
+
+    <p class="center">OKX</p>
+    <form action="/#" method="POST">
+      <div class="center">API Key
+        <label for="binance_api_key"><span class="hidden">API Key</span></label>
+        <input id="binance_api_key" type="text" name="okx_api_key" class="form-field" required>
+      </div>
+
+      <div class="center">API Secret
+        <label for="binance_api_secret"><span class="hidden">API Secret</span></label>
+        <input id="binance_api_secret" type="text" name="okx_api_secret" class="form-field" required>
+      </div>
+
+      <div class="center">API Passphrase
+        <label for="binance_api_secret"><span class="hidden">API Passphrase</span></label>
+        <input id="binance_api_secret" type="text" name="okx_api_passphrase" class="form-field" required>
+      </div>
+
+      <div class="center">
+        <input type="submit" value="Send">
+      </div>
+    </form>
+
+  </div>
+</body>
+
+        {% if current_user.is_authenticated() == True %}
+            <form action="/logout" method="POST">
+                <div class="center">
+                    <button class="button-24" role="button" type="submit">Logout</button>
+                </div>
+            </form>
+        {% endif %}
 {% endblock %}

@@ -17,8 +17,11 @@
             <li><a href="/p2p">P2P</a></li>
             <li><a href="/wallets">Wallet Tracking</a></li>
             <li><a href="/cryptos">List of crypto's</a></li>
-            <li><a href="/account">Account</a></li>
-            <li><a href="/login">Login</a></li>
+            {% if current_user.is_authenticated() == True %}
+                <li><a href="/account">Account</a></li>
+            {% else %}
+                <li><a href="/login">Login</a></li>
+            {% endif %}
         </ul>
     </nav>
     </header>
