@@ -19,7 +19,7 @@
       </div>
 
       <div class="center">
-        <input type="submit" value="Send">
+        <input class="button-green" type="submit" value="Send">
       </div>
     </form>
 
@@ -36,7 +36,7 @@
       </div>
 
       <div class="center">
-        <input type="submit" value="Send">
+        <input class="button-green" type="submit" value="Send">
       </div>
     </form>
 
@@ -58,7 +58,7 @@
       </div>
 
       <div class="center">
-        <input type="submit" value="Send">
+        <input class="button-green" type="submit" value="Send">
       </div>
     </form>
 
@@ -68,7 +68,7 @@
         {% if current_user.is_authenticated() == True %}
             <form action="/logout" method="POST">
                 <div class="center">
-                    <button class="button-24" role="button" type="submit">Logout</button>
+                    <button class="button-red" role="button" type="submit">Logout</button>
                 </div>
             </form>
         {% endif %}
